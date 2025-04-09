@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import { User, BarChart2, Brain, ChevronRight } from "lucide-react";
 import SkillsRadarChart from "../charts/SkillsRadarChart";
 
 interface PhysicalMetric {
@@ -51,40 +52,38 @@ export default function PlayerProfileOverview() {
 
   if (isLoading) {
     return (
-      <div className="mb-8">
-        <Skeleton className="h-7 w-40 mb-4" />
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/3 mb-6 md:mb-0 md:pr-6">
-              <Skeleton className="h-56 w-full" />
+      <div className="bg-neutral-800 border border-neutral-700 rounded-sm mb-4">
+        <div className="border-b border-neutral-700 px-3 py-2">
+          <Skeleton className="h-5 w-40 bg-neutral-700" />
+        </div>
+        <div className="p-4">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="lg:w-1/3">
+              <Skeleton className="h-56 w-full bg-neutral-700" />
             </div>
-            <div className="md:w-1/3 mb-6 md:mb-0 md:px-4">
-              <Skeleton className="h-5 w-40 mb-4" />
-              <div className="space-y-4">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i}>
-                    <div className="flex justify-between items-center mb-1">
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-12" />
-                    </div>
-                    <Skeleton className="h-2 w-full" />
+            <div className="lg:w-1/3 space-y-3">
+              <Skeleton className="h-5 w-28 bg-neutral-700" />
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="space-y-1">
+                  <div className="flex justify-between">
+                    <Skeleton className="h-3 w-20 bg-neutral-700" />
+                    <Skeleton className="h-3 w-10 bg-neutral-700" />
                   </div>
-                ))}
-              </div>
+                  <Skeleton className="h-2 w-full bg-neutral-700" />
+                </div>
+              ))}
             </div>
-            <div className="md:w-1/3 md:pl-6 border-t md:border-t-0 md:border-l border-neutral-200 pt-6 md:pt-0">
-              <Skeleton className="h-5 w-40 mb-4" />
-              <div className="space-y-4">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i}>
-                    <div className="flex justify-between items-center mb-1">
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-12" />
-                    </div>
-                    <Skeleton className="h-2 w-full" />
+            <div className="lg:w-1/3 space-y-3">
+              <Skeleton className="h-5 w-28 bg-neutral-700" />
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="space-y-1">
+                  <div className="flex justify-between">
+                    <Skeleton className="h-3 w-20 bg-neutral-700" />
+                    <Skeleton className="h-3 w-10 bg-neutral-700" />
                   </div>
-                ))}
-              </div>
+                  <Skeleton className="h-2 w-full bg-neutral-700" />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -97,30 +96,56 @@ export default function PlayerProfileOverview() {
   const chartData = data?.radarData || radarData;
 
   return (
-    <div className="mb-8">
-      <h2 className="text-lg font-semibold text-neutral-900 mb-4">Player Profile</h2>
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="flex flex-col md:flex-row">
-          <div className="md:w-1/3 mb-6 md:mb-0 md:pr-6">
-            <div className="chart-container h-64">
+    <div className="bg-neutral-800 border border-neutral-700 rounded-sm h-full">
+      <div className="flex items-center justify-between border-b border-neutral-700 px-3 py-2">
+        <div className="flex items-center">
+          <User className="h-3.5 w-3.5 text-neutral-400 mr-2" />
+          <h2 className="text-xs font-semibold text-neutral-100 uppercase">Marcus Johnson - Point Guard</h2>
+        </div>
+        <a href="/profile" className="flex items-center text-xs text-primary hover:text-primary/80">
+          Full Profile
+          <ChevronRight className="h-3 w-3 ml-1" />
+        </a>
+      </div>
+      
+      <div className="p-3">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Radar Chart */}
+          <div className="lg:w-1/3 bg-neutral-750 border border-neutral-700 rounded-sm p-3">
+            <div className="chart-container h-52">
               <SkillsRadarChart playerData={chartData.playerSkills} positionAverage={chartData.positionAverage} />
             </div>
-            <div className="text-center mt-4">
-              <span className="text-sm font-medium text-neutral-500">Skills Assessment</span>
+            <div className="mt-2 border-t border-neutral-700 pt-2">
+              <div className="flex text-xs justify-center space-x-6">
+                <div className="flex items-center">
+                  <div className="h-2 w-2 bg-primary rounded-full mr-1"></div>
+                  <span className="text-neutral-300">Player</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="h-2 w-2 bg-blue-600 rounded-full mr-1"></div>
+                  <span className="text-neutral-300">Position Avg</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="md:w-1/3 mb-6 md:mb-0 md:px-4">
-            <h3 className="text-sm font-semibold text-neutral-900 uppercase mb-4">Physical Metrics</h3>
-            <div className="space-y-4">
+          
+          {/* Physical Attributes */}
+          <div className="lg:w-1/3">
+            <div className="flex items-center mb-2">
+              <BarChart2 className="h-3.5 w-3.5 text-blue-400 mr-1.5" />
+              <h3 className="text-xs font-medium text-neutral-200">Physical Attributes</h3>
+            </div>
+            
+            <div className="space-y-2.5">
               {physicalMetrics.map((metric, index) => (
                 <div key={index}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm font-medium text-neutral-700">{metric.name}</span>
-                    <span className="text-sm font-medium text-neutral-900">{metric.value} / {metric.maxValue}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-neutral-400">{metric.name}</span>
+                    <span className="text-xs font-medium text-neutral-200">{metric.value}</span>
                   </div>
-                  <div className="h-2 w-full bg-neutral-200 rounded-full">
+                  <div className="mt-1 h-1.5 w-full bg-neutral-700 rounded-sm">
                     <div 
-                      className="h-2 bg-primary rounded-full" 
+                      className={`h-1.5 rounded-sm ${Math.round(metric.value) >= 8 ? 'bg-green-600' : Math.round(metric.value) >= 6 ? 'bg-blue-600' : 'bg-yellow-600'}`}
                       style={{ width: `${(metric.value / metric.maxValue) * 100}%` }}
                     ></div>
                   </div>
@@ -128,18 +153,24 @@ export default function PlayerProfileOverview() {
               ))}
             </div>
           </div>
-          <div className="md:w-1/3 md:pl-6 border-t md:border-t-0 md:border-l border-neutral-200 pt-6 md:pt-0">
-            <h3 className="text-sm font-semibold text-neutral-900 uppercase mb-4">Basketball IQ</h3>
-            <div className="space-y-4">
+          
+          {/* Basketball IQ */}
+          <div className="lg:w-1/3">
+            <div className="flex items-center mb-2">
+              <Brain className="h-3.5 w-3.5 text-green-400 mr-1.5" />
+              <h3 className="text-xs font-medium text-neutral-200">Basketball IQ</h3>
+            </div>
+            
+            <div className="space-y-2.5">
               {basketballIQMetrics.map((metric, index) => (
                 <div key={index}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm font-medium text-neutral-700">{metric.name}</span>
-                    <span className="text-sm font-medium text-neutral-900">{metric.value} / {metric.maxValue}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-neutral-400">{metric.name}</span>
+                    <span className="text-xs font-medium text-neutral-200">{metric.value}</span>
                   </div>
-                  <div className="h-2 w-full bg-neutral-200 rounded-full">
+                  <div className="mt-1 h-1.5 w-full bg-neutral-700 rounded-sm">
                     <div 
-                      className="h-2 bg-secondary rounded-full" 
+                      className={`h-1.5 rounded-sm ${Math.round(metric.value) >= 8 ? 'bg-green-600' : Math.round(metric.value) >= 6 ? 'bg-blue-600' : 'bg-yellow-600'}`}
                       style={{ width: `${(metric.value / metric.maxValue) * 100}%` }}
                     ></div>
                   </div>

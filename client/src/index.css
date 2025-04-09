@@ -10,4 +10,75 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+  
+  /* Football Manager 2024 inspired styles */
+  :root {
+    --neutral-750: #1f1f23;
+  }
+  
+  .bg-neutral-750 {
+    background-color: var(--neutral-750);
+  }
+  
+  /* Scrollbar styling similar to Football Manager */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-900;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-700 rounded-sm;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-600;
+  }
+  
+  /* Add Football Manager style focus outline */
+  *:focus-visible {
+    @apply outline-none ring-1 ring-primary;
+  }
+  
+  /* Make sure buttons have nice hover effects */
+  button, a {
+    @apply transition-colors duration-200;
+  }
+}
+
+/* Football Manager card styling */
+.fm-card {
+  @apply bg-neutral-800 border border-neutral-700 rounded-sm;
+}
+
+.fm-card-header {
+  @apply flex items-center justify-between border-b border-neutral-700 px-3 py-2;
+}
+
+.fm-card-title {
+  @apply text-xs font-semibold text-neutral-100 uppercase;
+}
+
+.fm-card-body {
+  @apply p-3;
+}
+
+/* Stat rating colors */
+.rating-excellent {
+  @apply bg-green-600 text-white;
+}
+
+.rating-good {
+  @apply bg-blue-600 text-white;
+}
+
+.rating-average {
+  @apply bg-yellow-600 text-white;
+}
+
+.rating-poor {
+  @apply bg-red-600 text-white;
 }

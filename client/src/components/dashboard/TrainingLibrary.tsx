@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Clock } from "lucide-react";
+import { Clock, Play, ChevronRight, Video, ArrowUpRight } from "lucide-react";
 
 interface TrainingResource {
   id: number;
@@ -18,23 +18,20 @@ export default function TrainingLibrary() {
 
   if (isLoading) {
     return (
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <Skeleton className="h-7 w-56" />
-          <Skeleton className="h-4 w-16" />
+      <div className="bg-neutral-800 border border-neutral-700 rounded-sm">
+        <div className="border-b border-neutral-700 px-3 py-2">
+          <Skeleton className="h-5 w-40 bg-neutral-700" />
         </div>
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="p-3 space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="p-6 border-b border-neutral-200">
-              <div className="flex">
-                <Skeleton className="h-24 w-36 rounded-lg" />
-                <div className="ml-4 flex-1">
-                  <Skeleton className="h-5 w-48 mb-2" />
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <div className="flex items-center">
-                    <Skeleton className="h-4 w-20 mr-4" />
-                    <Skeleton className="h-4 w-24" />
-                  </div>
+            <div key={i} className="bg-neutral-750 border border-neutral-700 rounded-sm">
+              <Skeleton className="h-24 w-full bg-neutral-700" />
+              <div className="p-2">
+                <Skeleton className="h-3.5 w-32 mb-2 bg-neutral-700" />
+                <Skeleton className="h-3 w-full mb-2 bg-neutral-700" />
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-3 w-16 bg-neutral-700" />
+                  <Skeleton className="h-3 w-16 bg-neutral-700" />
                 </div>
               </div>
             </div>
@@ -73,45 +70,66 @@ export default function TrainingLibrary() {
   ];
 
   const displayResources = resources || defaultResources;
+  
+  const getCategoryColor = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'shooting':
+        return 'border-blue-500 text-blue-400';
+      case 'ball handling':
+        return 'border-yellow-500 text-yellow-400';
+      case 'athletic training':
+        return 'border-green-500 text-green-400';
+      default:
+        return 'border-neutral-500 text-neutral-400';
+    }
+  };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-neutral-900">Skill Development Resources</h2>
-        <button className="text-sm font-medium text-secondary hover:text-secondary-dark">View All</button>
+    <div className="bg-neutral-800 border border-neutral-700 rounded-sm h-full">
+      <div className="flex items-center justify-between border-b border-neutral-700 px-3 py-2">
+        <div className="flex items-center">
+          <Video className="h-3.5 w-3.5 text-neutral-400 mr-2" />
+          <h2 className="text-xs font-semibold text-neutral-100 uppercase">Training Resources</h2>
+        </div>
+        <a href="/resources" className="flex items-center text-xs text-primary hover:text-primary/80">
+          View Library
+          <ChevronRight className="h-3 w-3 ml-1" />
+        </a>
       </div>
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        {displayResources.map((resource, index) => (
+      
+      <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-3">
+        {displayResources.map((resource) => (
           <div 
             key={resource.id} 
-            className={`p-6 ${index !== displayResources.length - 1 ? 'border-b border-neutral-200' : ''}`}
+            className="bg-neutral-750 border border-neutral-700 rounded-sm overflow-hidden hover:border-neutral-600 transition-colors"
           >
-            <div className="flex">
-              <div className="flex-shrink-0 relative">
-                <img 
-                  src={resource.thumbnailUrl} 
-                  alt={resource.title} 
-                  className="h-24 w-36 object-cover rounded-lg"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-10 w-10 bg-black bg-opacity-60 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                </div>
+            <div className="relative group">
+              <img 
+                src={resource.thumbnailUrl} 
+                alt={resource.title} 
+                className="h-24 w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
+                  <Play className="h-4 w-4 text-white ml-0.5" />
+                </button>
               </div>
-              <div className="ml-4 flex-1">
-                <h3 className="text-base font-semibold text-neutral-900 mb-1">{resource.title}</h3>
-                <p className="text-sm text-neutral-600 mb-2">{resource.description}</p>
-                <div className="flex items-center text-xs font-medium text-neutral-500">
-                  <span className="flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    {resource.duration}
-                  </span>
-                  <span className="mx-2">•</span>
-                  <span className="px-2 py-1 text-xs bg-neutral-100 rounded-full">{resource.category}</span>
-                </div>
+              <div className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-black bg-opacity-75 rounded text-[10px] text-white flex items-center">
+                <Clock className="h-2.5 w-2.5 mr-1" />
+                {resource.duration}
+              </div>
+            </div>
+            <div className="p-2">
+              <h3 className="text-xs font-medium text-neutral-100 mb-1 truncate">{resource.title}</h3>
+              <p className="text-[10px] text-neutral-400 mb-1.5 line-clamp-2">{resource.description}</p>
+              <div className="flex justify-between items-center">
+                <span className={`text-[10px] font-medium border-l-2 pl-1.5 ${getCategoryColor(resource.category)}`}>
+                  {resource.category}
+                </span>
+                <button className="text-[10px] text-primary flex items-center hover:underline">
+                  Watch
+                  <ArrowUpRight className="h-2.5 w-2.5 ml-0.5" />
+                </button>
               </div>
             </div>
           </div>
