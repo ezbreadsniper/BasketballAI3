@@ -8,7 +8,6 @@ import Dashboard from "@/pages/dashboard";
 import Profile from "@/pages/profile";
 import TrainingPlans from "@/pages/training-plans";
 import Team from "@/pages/team";
-import TeamEnhanced from "@/pages/team-enhanced";
 import Resources from "@/pages/resources";
 import Analytics from "@/pages/analytics";
 import Progress from "@/pages/progress";
@@ -20,8 +19,7 @@ function Router() {
         <Route path="/" component={Dashboard} />
         <Route path="/profile" component={Profile} />
         <Route path="/training-plans" component={TrainingPlans} />
-        <Route path="/team" component={TeamEnhanced} />
-        <Route path="/team-old" component={Team} />
+        <Route path="/team" component={Team} />
         <Route path="/resources" component={Resources} />
         <Route path="/analytics" component={Analytics} />
         <Route path="/progress" component={Progress} />
