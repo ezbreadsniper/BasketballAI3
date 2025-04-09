@@ -11,6 +11,9 @@ export const users = pgTable("users", {
   email: text("email").notNull(),
   role: text("role", { enum: ["player", "coach", "trainer", "parent", "admin"] }).notNull(),
   profileImage: text("profile_image"),
+  fullName: text("full_name"),
+  position: text("position"),
+  team: text("team"),
 });
 
 export const insertUserSchema = createInsertSchema(users).omit({
@@ -95,6 +98,7 @@ export const teams = pgTable("teams", {
   name: text("name").notNull(),
   coachId: integer("coach_id").notNull().references(() => users.id),
   description: text("description"),
+  formation: jsonb("formation"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

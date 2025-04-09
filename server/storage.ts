@@ -8,6 +8,11 @@ import {
 } from "@shared/schema";
 
 // CRUD operations interface
+import session from "express-session";
+import createMemoryStore from "memorystore";
+
+const MemoryStore = createMemoryStore(session);
+
 export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
@@ -34,12 +39,20 @@ export interface IStorage {
   
   // Team operations
   getTeam(id: number): Promise<Team | undefined>;
+  getTeamByCoach(coachId: number): Promise<Team | undefined>;
   createTeam(team: InsertTeam): Promise<Team>;
+  getTeamPlayers(teamId: number): Promise<User[]>;
+  
+  // Coach operations
+  getPlayersByCoach(coachId: number): Promise<User[]>;
   
   // Dashboard data operations
   getPlayerDevelopmentSummary(userId: number): Promise<any>;
   getPlayerProfileOverview(userId: number): Promise<any>;
   getTrainingRecommendations(userId: number): Promise<any[]>;
+  
+  // Authentication
+  sessionStore: session.Store;
 }
 
 export class MemStorage implements IStorage {
@@ -49,6 +62,7 @@ export class MemStorage implements IStorage {
   private trainingResources: Map<number, TrainingResource>;
   private activityLogs: Map<number, ActivityLog>;
   private teams: Map<number, Team>;
+  public sessionStore: session.Store;
   
   currentId: {
     users: number;
@@ -66,6 +80,9 @@ export class MemStorage implements IStorage {
     this.trainingResources = new Map();
     this.activityLogs = new Map();
     this.teams = new Map();
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000, // Clear expired sessions every day
+    });
     
     this.currentId = {
       users: 1,
@@ -93,7 +110,15 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentId.users++;
-    const user: User = { ...insertUser, id };
+    const user: User = { 
+      ...insertUser, 
+      id, 
+      // Ensure all fields are initialized with proper values
+      profileImage: insertUser.profileImage || null,
+      fullName: insertUser.fullName || null,
+      position: insertUser.position || null,
+      team: insertUser.team || null
+    };
     this.users.set(id, user);
     return user;
   }
@@ -112,7 +137,12 @@ export class MemStorage implements IStorage {
       ...profile, 
       id, 
       createdAt: now, 
-      updatedAt: now 
+      updatedAt: now, 
+      // Ensure all fields are initialized with proper values
+      height: profile.height || null,
+      weight: profile.weight || null,
+      age: profile.age || null,
+      teamId: profile.teamId || null
     };
     this.playerProfiles.set(id, playerProfile);
     return playerProfile;
@@ -167,9 +197,16 @@ export class MemStorage implements IStorage {
   // Activity logging
   async logActivity(activity: InsertActivityLog): Promise<ActivityLog> {
     const id = this.currentId.activityLogs++;
+    const now = new Date();
     const activityLog: ActivityLog = { 
       ...activity, 
-      id
+      id,
+      // Ensure all fields are initialized with proper values
+      description: activity.description || null,
+      duration: activity.duration || null,
+      points: activity.points || null,
+      result: activity.result || {},
+      timestamp: activity.timestamp || now
     };
     this.activityLogs.set(id, activityLog);
     return activityLog;
@@ -187,13 +224,45 @@ export class MemStorage implements IStorage {
     return this.teams.get(id);
   }
   
+  async getTeamByCoach(coachId: number): Promise<Team | undefined> {
+    return Array.from(this.teams.values()).find(
+      team => team.coachId === coachId
+    );
+  }
+  
+  async getTeamPlayers(teamId: number): Promise<User[]> {
+    const team = await this.getTeam(teamId);
+    if (!team) return [];
+    
+    // Get all players with profiles that have this teamId
+    const playerProfiles = Array.from(this.playerProfiles.values())
+      .filter(profile => profile.teamId === teamId);
+    
+    // Get the corresponding users
+    const playerUsers = playerProfiles.map(profile => 
+      this.users.get(profile.userId)
+    ).filter(Boolean) as User[];
+    
+    return playerUsers;
+  }
+  
+  async getPlayersByCoach(coachId: number): Promise<User[]> {
+    const team = await this.getTeamByCoach(coachId);
+    if (!team) return [];
+    
+    return this.getTeamPlayers(team.id);
+  }
+  
   async createTeam(team: InsertTeam): Promise<Team> {
     const id = this.currentId.teams++;
     const now = new Date();
     const newTeam: Team = { 
       ...team, 
       id, 
-      createdAt: now 
+      createdAt: now,
+      // Ensure all fields are initialized with proper values
+      description: team.description || null,
+      formation: team.formation || {}
     };
     this.teams.set(id, newTeam);
     return newTeam;
@@ -300,7 +369,10 @@ export class MemStorage implements IStorage {
       name: "Marcus Johnson",
       email: "marcus@example.com",
       role: "player",
-      profileImage: null
+      profileImage: null,
+      fullName: "Marcus Johnson",
+      position: "SG",
+      team: "Eastside Eagles"
     };
     this.users.set(mockUser.id, mockUser);
     

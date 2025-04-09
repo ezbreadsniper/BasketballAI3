@@ -12,30 +12,75 @@ import Resources from "@/pages/resources";
 import Analytics from "@/pages/analytics";
 import Progress from "@/pages/progress";
 import PlayerAssessment from "@/pages/player-assessment";
+import AuthPage from "./pages/auth-page";
+import { AuthProvider } from "./hooks/use-auth";
+import { ProtectedRoute } from "./lib/protected-route";
 
 function Router() {
   return (
-    <AppLayout>
-      <Switch>
-        <Route path="/" component={Dashboard} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/training-plans" component={TrainingPlans} />
-        <Route path="/player-assessment" component={PlayerAssessment} />
-        <Route path="/team" component={Team} />
-        <Route path="/resources" component={Resources} />
-        <Route path="/analytics" component={Analytics} />
-        <Route path="/progress" component={Progress} />
-        <Route component={NotFound} />
-      </Switch>
-    </AppLayout>
+    <Switch>
+      <Route path="/auth" component={AuthPage} />
+      
+      <ProtectedRoute path="/" component={() => (
+        <AppLayout>
+          <Dashboard />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/profile" component={() => (
+        <AppLayout>
+          <Profile />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/training-plans" component={() => (
+        <AppLayout>
+          <TrainingPlans />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/player-assessment" component={() => (
+        <AppLayout>
+          <PlayerAssessment />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/team" component={() => (
+        <AppLayout>
+          <Team />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/resources" component={() => (
+        <AppLayout>
+          <Resources />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/analytics" component={() => (
+        <AppLayout>
+          <Analytics />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/progress" component={() => (
+        <AppLayout>
+          <Progress />
+        </AppLayout>
+      )} />
+      
+      <Route component={NotFound} />
+    </Switch>
   );
 }
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
+      <AuthProvider>
+        <Router />
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
