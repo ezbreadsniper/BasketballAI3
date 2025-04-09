@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDrag } from 'react-dnd';
 import { motion } from 'framer-motion';
 
 interface Player {
@@ -37,13 +36,34 @@ const DraggableCourtPlayer: React.FC<DraggableCourtPlayerProps> = ({
   showDetails = false,
   onClick
 }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'player',
-    item: { id: player.id, position: position.id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
+  const [isDragging, setIsDragging] = React.useState(false);
+  
+  // Handle dragging
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    const dragData = {
+      id: player.id,
+      position: position.id
+    };
+    e.dataTransfer.setData('text', JSON.stringify(dragData));
+    e.dataTransfer.effectAllowed = 'move';
+    
+    // Create a ghost image that looks better
+    const ghost = document.createElement('div');
+    ghost.classList.add('w-12', 'h-12', 'rounded-full', 'bg-primary', 'flex', 'items-center', 'justify-center', 'text-white', 'font-bold');
+    ghost.textContent = player.number.toString();
+    ghost.style.opacity = '0.8';
+    document.body.appendChild(ghost);
+    e.dataTransfer.setDragImage(ghost, 20, 20);
+    
+    setTimeout(() => {
+      ghost.remove();
+    }, 0);
+  };
+  
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
 
   // Get color based on player position
   const getPositionColor = (pos: string) => {
@@ -72,7 +92,6 @@ const DraggableCourtPlayer: React.FC<DraggableCourtPlayerProps> = ({
 
   return (
     <motion.div 
-      ref={drag}
       className={`absolute cursor-grab ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       style={{ 
         top: position.y, 
@@ -84,9 +103,14 @@ const DraggableCourtPlayer: React.FC<DraggableCourtPlayerProps> = ({
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: index * 0.05, duration: 0.2 }}
       whileHover={{ scale: 1.1 }}
-      onClick={() => onClick && onClick(player)}
     >
-      <div className="flex flex-col items-center select-none">
+      <div
+        draggable={true}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onClick={() => onClick && onClick(player)}
+        className="flex flex-col items-center select-none"
+      >
         <div className={`relative glass-panel bg-gradient-to-br ${getPositionColor(player.position)} w-12 h-12 rounded-full flex items-center justify-center text-white font-bold shadow-lg border-2 ${getBorderColor(player.position)}`}>
           <span className="text-sm">{player.number}</span>
           

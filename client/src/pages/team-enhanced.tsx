@@ -83,13 +83,34 @@ const BenchPlayer = ({ player, position, onClick }: {
   position: { id: number; position: string }; 
   onClick?: (player: Player) => void;
 }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'benchPlayer',
-    item: { id: player.id, benchPosition: position.id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
+  const [isDragging, setIsDragging] = React.useState(false);
+  
+  // Handle dragging
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    const dragData = {
+      id: player.id,
+      benchPosition: position.id
+    };
+    e.dataTransfer.setData('text', JSON.stringify(dragData));
+    e.dataTransfer.effectAllowed = 'move';
+    
+    // Create a ghost image that looks better
+    const ghost = document.createElement('div');
+    ghost.classList.add('w-10', 'h-10', 'rounded-full', 'bg-primary', 'flex', 'items-center', 'justify-center', 'text-white', 'font-bold');
+    ghost.textContent = player.number.toString();
+    ghost.style.opacity = '0.8';
+    document.body.appendChild(ghost);
+    e.dataTransfer.setDragImage(ghost, 20, 20);
+    
+    setTimeout(() => {
+      ghost.remove();
+    }, 0);
+  };
+  
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
 
   // Get color based on player position
   const getPositionColor = (pos: string) => {
@@ -118,8 +139,10 @@ const BenchPlayer = ({ player, position, onClick }: {
 
   return (
     <motion.div
-      ref={drag}
-      className={`flex items-center p-2 my-1 rounded-md bg-neutral-800 border border-neutral-700 ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+      draggable="true"
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      className={`flex items-center p-2 my-1 rounded-md bg-neutral-800 border border-neutral-700 ${isDragging ? 'opacity-50' : 'opacity-100'} cursor-grab`}
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.2 }}
@@ -910,34 +933,43 @@ export default function TeamEnhanced() {
   const courtContainerRef = useRef<HTMLDivElement>(null);
   
   // Handle dropping players
-  const [, dropRef] = useDrop(
-    () => ({
-      accept: ['player', 'benchPlayer'],
-      drop: (item: any, monitor) => {
-        const dropPosition = monitor.getClientOffset();
-        if (dropPosition && courtContainerRef.current) {
-          const courtRect = courtContainerRef.current.getBoundingClientRect();
-          const relativeX = Math.min(Math.max((dropPosition.x - courtRect.left) / courtRect.width, 0), 1);
-          const relativeY = Math.min(Math.max((dropPosition.y - courtRect.top) / courtRect.height, 0), 1);
-          
-          if (item.id && item.position !== undefined) {
-            // Court player being moved
-            const newStarting = formations.starting.map(pos => {
-              if (pos.id === item.position) {
-                return { ...pos, x: relativeX * 100 + '%', y: relativeY * 100 + '%' };
-              }
-              return pos;
-            });
-            setFormations({ ...formations, starting: newStarting });
-          } else if (item.id && item.benchPosition !== undefined) {
-            // Bench player being moved to court - would need to implement swap logic
-            console.log('Bench player dropped on court', item);
-          }
+  const courtDropRef = useRef(null);
+  
+  // We'll use a different approach for handling the drop to avoid the drag context error
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    
+    const data = event.dataTransfer.getData('text');
+    try {
+      const item = JSON.parse(data);
+      const courtRect = courtContainerRef.current?.getBoundingClientRect();
+      
+      if (courtRect) {
+        const relativeX = Math.min(Math.max((event.clientX - courtRect.left) / courtRect.width, 0), 1);
+        const relativeY = Math.min(Math.max((event.clientY - courtRect.top) / courtRect.height, 0), 1);
+        
+        if (item.id && item.position !== undefined) {
+          // Court player being moved
+          const newStarting = formations.starting.map(pos => {
+            if (pos.id === item.position) {
+              return { ...pos, x: relativeX * 100 + '%', y: relativeY * 100 + '%' };
+            }
+            return pos;
+          });
+          setFormations({ ...formations, starting: newStarting });
+        } else if (item.id && item.benchPosition !== undefined) {
+          // Bench player being moved to court - would need to implement swap logic
+          console.log('Bench player dropped on court', item);
         }
       }
-    }),
-    [formations]
-  );
+    } catch (e) {
+      console.error('Error processing dropped item:', e);
+    }
+  };
+  
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
   
   // Create a temp copy of starting positions when playing animation
   const visualPositions = isPlayingAnimation && currentPlay && currentPlay.animation.frames[currentFrameIndex]
@@ -1152,7 +1184,9 @@ export default function TeamEnhanced() {
               <div className="relative flex-1 overflow-hidden" ref={courtContainerRef}>
                 <div 
                   className="absolute inset-0"
-                  ref={dropRef}
+                  ref={courtDropRef}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
                 >
                   {/* Basketball court */}
                   <BasketballCourt>
