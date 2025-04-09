@@ -96,6 +96,14 @@ export function setupAuth(app: Express) {
   // Authentication routes
   app.post("/api/register", async (req, res, next) => {
     try {
+      console.log("Registration request:", {
+        username: req.body.username,
+        role: req.body.role,
+        position: req.body.position,
+        team: req.body.team,
+        fullName: req.body.fullName
+      });
+      
       // Check if username already exists
       const existingUser = await storage.getUserByUsername(req.body.username);
       if (existingUser) {
@@ -105,17 +113,23 @@ export function setupAuth(app: Express) {
       // Create new user with hashed password
       const hashedPassword = await hashPassword(req.body.password);
       
+      // Validate and ensure role is a valid value
+      let role = req.body.role || "player";
+      if (role !== "player" && role !== "coach") {
+        role = "player"; // Default to player if invalid role
+      }
+      
       // Extract relevant fields from request body and add defaults
       const userData = {
         username: req.body.username,
         password: hashedPassword,
         name: req.body.fullName || req.body.username,
         email: req.body.email || `${req.body.username}@example.com`,
-        role: req.body.role || "player",
+        role: role,
         profileImage: null,
         fullName: req.body.fullName,
-        position: req.body.position,
-        team: req.body.team
+        position: role === "player" ? (req.body.position || null) : null,
+        team: req.body.team || null
       };
       
       try {
@@ -134,15 +148,25 @@ export function setupAuth(app: Express) {
           });
         }
         
-        // If the user is a coach, create a team 
-        if (user.role === "coach" && req.body.team) {
+        // If the user is a coach, create a team
+        if (user.role === "coach") {
           try {
+            console.log("Attempting to create team for coach:", {
+              coachId: user.id,
+              teamName: req.body.team || "Unnamed Team"
+            });
+            
+            // Default to "Unnamed Team" if team name is not provided
+            const teamName = req.body.team || "Unnamed Team";
+            
             await storage.createTeam({
-              name: req.body.team,
+              name: teamName,
               coachId: user.id,
               description: `Team coached by ${user.name}`,
               formation: {}
             });
+            
+            console.log("Team created successfully for coach:", user.id);
           } catch (error) {
             console.error("Failed to create team for coach:", error);
             // Continue with login even if team creation fails
