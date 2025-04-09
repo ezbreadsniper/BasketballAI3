@@ -190,13 +190,113 @@
 
 /* Basketball court styles */
 .basketball-court {
-  background: linear-gradient(to bottom, #2D5E38, #1A4225);
-  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  background: #F0E68C; /* Light wooden court color */
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
   position: relative;
+  overflow: hidden;
 }
 
 .court-marking {
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.7);
+}
+
+.court-outline {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+}
+
+.court-center-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  top: 50%;
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: translateY(-1px);
+}
+
+.court-center-circle {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.court-arc {
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8);
+  border-width: 2px;
+}
+
+.three-point-arc {
+  position: absolute;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8);
+  border-width: 2px;
+  border-radius: 50%;
+}
+
+.free-throw-circle {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+}
+
+.free-throw-line {
+  position: absolute;
+  width: 140px;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.backboard {
+  position: absolute;
+  width: 60px;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.basket {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+}
+
+.key-area {
+  position: absolute;
+  width: 160px;
+  height: 190px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  border-top: none;
+}
+
+.court-wood-grain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(210, 180, 140, 0.1) 0px,
+    rgba(210, 180, 140, 0.1) 2px,
+    transparent 2px,
+    transparent 20px
+  );
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 /* Play animation styles */
