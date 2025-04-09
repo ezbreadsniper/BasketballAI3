@@ -11,6 +11,7 @@ import Team from "@/pages/team";
 import Resources from "@/pages/resources";
 import Analytics from "@/pages/analytics";
 import Progress from "@/pages/progress";
+import PlayerAssessment from "@/pages/player-assessment";
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
         <Route path="/" component={Dashboard} />
         <Route path="/profile" component={Profile} />
         <Route path="/training-plans" component={TrainingPlans} />
+        <Route path="/player-assessment" component={PlayerAssessment} />
         <Route path="/team" component={Team} />
         <Route path="/resources" component={Resources} />
         <Route path="/analytics" component={Analytics} />

@@ -11,7 +11,8 @@ import {
   Award,
   Target,
   Settings,
-  ChevronRight
+  ChevronRight,
+  Ruler
 } from "lucide-react";
 
 interface SidebarProps {
@@ -34,6 +35,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       category: "Player Development",
       items: [
         { path: "/profile", label: "Player Profile", icon: <User className="h-4 w-4 mr-2" /> },
+        { path: "/player-assessment", label: "Skill Assessment", icon: <Ruler className="h-4 w-4 mr-2" /> },
         { path: "/training-plans", label: "Training Schedule", icon: <Dumbbell className="h-4 w-4 mr-2" /> },
         { path: "/analytics", label: "Performance Data", icon: <BarChart3 className="h-4 w-4 mr-2" /> },
         { path: "/progress", label: "Development Hub", icon: <TrendingUp className="h-4 w-4 mr-2" /> },
