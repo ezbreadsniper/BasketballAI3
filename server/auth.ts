@@ -134,14 +134,19 @@ export function setupAuth(app: Express) {
           });
         }
         
-        // If the user is a coach, create a team
-        if (user.role === "coach" && req.body.teamName) {
-          await storage.createTeam({
-            name: req.body.teamName,
-            coachId: user.id,
-            description: `Team coached by ${user.name}`,
-            formation: {}
-          });
+        // If the user is a coach, create a team 
+        if (user.role === "coach" && req.body.team) {
+          try {
+            await storage.createTeam({
+              name: req.body.team,
+              coachId: user.id,
+              description: `Team coached by ${user.name}`,
+              formation: {}
+            });
+          } catch (error) {
+            console.error("Failed to create team for coach:", error);
+            // Continue with login even if team creation fails
+          }
         }
 
         // Login the user after successful registration
