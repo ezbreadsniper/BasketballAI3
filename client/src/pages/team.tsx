@@ -1286,51 +1286,11 @@ export default function Team() {
                 <div className="fm-card-body p-3">
                   {/* Interactive court with drag and drop */}
                   <CourtDropZone onDrop={handlePlayerDrop}>
-                    {/* Court background and wood grain effect */}
-                    <div className="court-wood-grain"></div>
-                    <div className="court-outline"></div>
-
-                    {/* Center line and center circle */}
-                    <div className="court-center-line"></div>
-                    <div className="court-center-circle"></div>
-
-                    {/* Top half court (left side in image) */}
-                    <div className="key-area" style={{ top: "calc(50% - 190px)", left: "calc(50% - 80px)" }}></div>
-                    <div className="free-throw-line" style={{ top: "calc(50% - 190px + 190px)", left: "calc(50% - 70px)" }}></div>
-                    <div className="free-throw-circle" style={{ top: "calc(50% - 190px + 190px - 60px)", left: "calc(50%)", transform: "translateX(-50%)" }}></div>
-                    <div className="backboard" style={{ top: "10px", left: "calc(50% - 30px)" }}></div>
-                    <div className="basket" style={{ top: "20px", left: "50%", transform: "translateX(-50%)" }}></div>
-                    <div 
-                      className="three-point-arc" 
-                      style={{ 
-                        top: "calc(50% - 240px)", 
-                        left: "50%", 
-                        width: "400px", 
-                        height: "400px", 
-                        transform: "translateX(-50%)",
-                        clipPath: "polygon(0 50%, 100% 50%, 100% 100%, 0 100%)",
-                        borderBottomWidth: 0
-                      }}
-                    ></div>
-
-                    {/* Bottom half court (right side in image) */}
-                    <div className="key-area" style={{ bottom: "calc(50% - 190px)", left: "calc(50% - 80px)" }}></div>
-                    <div className="free-throw-line" style={{ bottom: "calc(50% - 190px + 190px)", left: "calc(50% - 70px)" }}></div>
-                    <div className="free-throw-circle" style={{ bottom: "calc(50% - 190px + 190px - 60px)", left: "calc(50%)", transform: "translateX(-50%)" }}></div>
-                    <div className="backboard" style={{ bottom: "10px", left: "calc(50% - 30px)" }}></div>
-                    <div className="basket" style={{ bottom: "20px", left: "50%", transform: "translateX(-50%)" }}></div>
-                    <div 
-                      className="three-point-arc" 
-                      style={{ 
-                        bottom: "calc(50% - 240px)", 
-                        left: "50%", 
-                        width: "400px", 
-                        height: "400px", 
-                        transform: "translateX(-50%)",
-                        clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 50%)",
-                        borderTopWidth: 0
-                      }}
-                    ></div>
+                    {/* Court markings */}
+                    <div className="absolute w-3/4 h-4/5 court-marking top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg"></div>
+                    <div className="absolute w-24 h-24 court-marking top-[15%] left-1/2 transform -translate-x-1/2 rounded-full"></div>
+                    <div className="absolute w-24 h-24 court-marking bottom-[15%] left-1/2 transform -translate-x-1/2 rounded-full"></div>
+                    <div className="absolute w-px h-full bg-white bg-opacity-30 left-1/2 transform -translate-x-1/2"></div>
                     
                     {/* Drawing overlay */}
                     <DrawingTool 
