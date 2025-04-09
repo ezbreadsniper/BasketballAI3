@@ -121,13 +121,13 @@ const DraggablePlayer = ({ player, position, index }: { player: Player; position
       whileHover={{ scale: 1.1 }}
     >
       <div className="flex flex-col items-center select-none">
-        <div className="glass-panel bg-yellow-400 w-10 h-10 rounded-full flex items-center justify-center text-black font-bold text-xs mb-1 shadow-lg hover-glow">
+        <div className="glass-panel bg-gradient-to-br from-amber-400 to-amber-600 w-12 h-12 rounded-full flex items-center justify-center text-black font-bold text-sm mb-1 shadow-lg hover-glow border-2 border-amber-300">
           {player.number}
         </div>
-        <div className="text-white text-xs font-medium bg-black bg-opacity-70 backdrop-blur-sm px-2 py-0.5 rounded shadow-sm">
+        <div className="text-white text-xs font-semibold bg-black bg-opacity-80 backdrop-blur-sm px-2 py-0.5 rounded-sm shadow-sm">
           {player.name.split(' ').pop()}
         </div>
-        <div className="text-white text-[10px] bg-black bg-opacity-60 backdrop-blur-sm px-1.5 rounded-sm">
+        <div className="text-white text-[10px] bg-primary bg-opacity-90 backdrop-blur-sm px-1.5 rounded-sm">
           {position.position}
         </div>
       </div>
@@ -158,7 +158,7 @@ const CourtDropZone = ({ onDrop, children }: { onDrop: (item: any, position: { x
     <div 
       id="court"
       ref={drop} 
-      className={`relative h-[500px] basketball-court rounded-sm overflow-hidden ${isOver ? 'ring-2 ring-primary ring-opacity-50' : ''}`}
+      className={`relative h-[550px] basketball-court rounded-sm overflow-hidden ${isOver ? 'ring-2 ring-primary ring-opacity-50' : ''}`}
     >
       {children}
     </div>
@@ -178,16 +178,16 @@ const BenchPlayer = ({ player, position }: { player: Player; position: { id: num
   return (
     <motion.div 
       ref={drag}
-      className={`bg-neutral-750 border border-neutral-700 p-2 rounded-sm flex flex-col items-center hover:bg-neutral-700 transition-colors ${isDragging ? 'opacity-50' : 'opacity-100'} cursor-grab`}
+      className={`bg-neutral-800 border border-neutral-700 p-2 rounded-sm flex flex-col items-center hover:bg-neutral-700 transition-colors ${isDragging ? 'opacity-50' : 'opacity-100'} cursor-grab`}
       whileHover={{ y: -3, boxShadow: "0 5px 10px rgba(0,0,0,0.3)" }}
     >
-      <div className="bg-gradient-to-b from-neutral-700 to-neutral-800 w-8 h-8 rounded-full flex items-center justify-center text-white text-xs mb-1 shadow-inner">
+      <div className="bg-gradient-to-b from-amber-500 to-amber-600 w-8 h-8 rounded-full flex items-center justify-center text-black text-xs mb-1 shadow font-bold border border-amber-300">
         {player.number}
       </div>
-      <div className="text-neutral-300 text-xs text-center font-medium">
+      <div className="text-neutral-200 text-xs text-center font-semibold">
         {player.name.split(' ').pop()}
       </div>
-      <div className="text-neutral-500 text-[10px]">{position.position}</div>
+      <div className="text-primary text-[10px] font-medium">{position.position}</div>
     </motion.div>
   );
 };
