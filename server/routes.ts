@@ -51,9 +51,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   };
 
   // User routes
-  app.get('/api/user/current', ensureAuthenticated, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/user/current', ensureAuthenticated, async (req: Request, res) => {
     try {
-      // We can safely access user without non-null assertion because of the typed request
+      // We've already checked req.user exists in ensureAuthenticated
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
       const { password, ...userWithoutPassword } = req.user;
       return res.json(userWithoutPassword);
     } catch (error) {

@@ -118,40 +118,45 @@ export function setupAuth(app: Express) {
         team: req.body.team
       };
       
-      const user = await storage.createUser(userData);
+      try {
+        const user = await storage.createUser(userData);
 
-      // If the user is a player, create a player profile
-      if (user.role === "player") {
-        await storage.createPlayerProfile({
-          userId: user.id,
-          position: user.position || "guard",
-          attributes: {},
-          height: req.body.height ? parseInt(req.body.height) : null,
-          weight: req.body.weight ? parseInt(req.body.weight) : null,
-          age: req.body.age ? parseInt(req.body.age) : null,
-          teamId: null,
-        });
-      }
-      
-      // If the user is a coach, create a team
-      if (user.role === "coach" && req.body.teamName) {
-        await storage.createTeam({
-          name: req.body.teamName,
-          coachId: user.id,
-          description: `Team coached by ${user.name}`,
-          formation: {}
-        });
-      }
-
-      // Login the user after successful registration
-      req.login(user, (err) => {
-        if (err) {
-          return next(err);
+        // If the user is a player, create a player profile
+        if (user.role === "player") {
+          await storage.createPlayerProfile({
+            userId: user.id,
+            position: user.position || "guard",
+            attributes: {},
+            height: req.body.height ? parseInt(req.body.height) : null,
+            weight: req.body.weight ? parseInt(req.body.weight) : null,
+            age: req.body.age ? parseInt(req.body.age) : null,
+            teamId: null,
+          });
         }
-        const { password, ...userWithoutPassword } = user;
-        return res.status(201).json(userWithoutPassword);
-      });
-    } catch (error) {
+        
+        // If the user is a coach, create a team
+        if (user.role === "coach" && req.body.teamName) {
+          await storage.createTeam({
+            name: req.body.teamName,
+            coachId: user.id,
+            description: `Team coached by ${user.name}`,
+            formation: {}
+          });
+        }
+
+        // Login the user after successful registration
+        req.login(user, (err) => {
+          if (err) {
+            return next(err);
+          }
+          const { password, ...userWithoutPassword } = user;
+          return res.status(201).json(userWithoutPassword);
+        });
+      } catch (error: any) {
+        console.error("User creation error:", error);
+        return res.status(400).json({ message: error.message || "Failed to create user" });
+      }
+    } catch (error: any) {
       console.error("Registration error:", error);
       return res.status(500).json({ message: "Failed to register user" });
     }

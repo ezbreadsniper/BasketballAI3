@@ -16,7 +16,10 @@ export const users = pgTable("users", {
   team: text("team"),
 });
 
-export const insertUserSchema = createInsertSchema(users).omit({
+export const insertUserSchema = createInsertSchema(users, {
+  role: z.enum(["player", "coach", "trainer", "parent", "admin"]),
+  email: z.string().email().optional(),
+}).omit({
   id: true,
 });
 

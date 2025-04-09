@@ -114,6 +114,7 @@ export class MemStorage implements IStorage {
       ...insertUser, 
       id, 
       // Ensure all fields are initialized with proper values
+      email: insertUser.email || `${insertUser.username}@example.com`,
       profileImage: insertUser.profileImage || null,
       fullName: insertUser.fullName || null,
       position: insertUser.position || null,
