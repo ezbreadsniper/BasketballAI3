@@ -941,7 +941,11 @@ export default function TeamEnhanced() {
   
   // Create a temp copy of starting positions when playing animation
   const visualPositions = isPlayingAnimation && currentPlay && currentPlay.animation.frames[currentFrameIndex]
-    ? currentPlay.animation.frames[currentFrameIndex].positions
+    ? currentPlay.animation.frames[currentFrameIndex].positions.map(pos => ({
+        ...pos,
+        position: 'F', // Default position as forward
+        playerId: pos.id // Use the id as playerId for animation frames
+      }))
     : formations.starting;
     
   // Create a temp copy of drawings when playing animation

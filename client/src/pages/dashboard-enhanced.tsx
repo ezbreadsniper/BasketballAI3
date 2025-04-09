@@ -37,7 +37,14 @@ const GlassPanel = ({
 
 // Development Progress Card
 const DevelopmentProgress = () => {
-  const { data } = useQuery({
+  const { data } = useQuery<Array<{
+    label: string;
+    value: number;
+    change: string;
+    percentage: number;
+    icon: React.ReactNode;
+    color: string;
+  }>>({
     queryKey: ['/api/player/development-summary'],
   });
 
@@ -94,7 +101,15 @@ const DevelopmentProgress = () => {
 
 // AI Training Recommendations
 const AIRecommendations = () => {
-  const { data } = useQuery({
+  const { data } = useQuery<Array<{
+    id: number;
+    title: string;
+    description: string;
+    duration: string;
+    priority: string;
+    category: string;
+    icon: string;
+  }>>({
     queryKey: ['/api/training/recommendations'],
   });
 
@@ -183,7 +198,15 @@ const AIRecommendations = () => {
 
 // Recent Activities
 const RecentActivities = () => {
-  const { data } = useQuery({
+  const { data } = useQuery<Array<{
+    id: number;
+    title: string;
+    subtitle: string;
+    timestamp: string;
+    duration: string;
+    points: number;
+    type: 'workout' | 'video' | 'assessment';
+  }>>({
     queryKey: ['/api/player/recent-activities'],
   });
 
@@ -255,7 +278,13 @@ const RecentActivities = () => {
 
 // Training Resources
 const TrainingResources = () => {
-  const { data } = useQuery({
+  const { data } = useQuery<Array<{
+    id: number;
+    title: string;
+    description: string;
+    duration: string;
+    category: string;
+  }>>({
     queryKey: ['/api/training/resources'],
   });
 
@@ -325,7 +354,12 @@ const TrainingResources = () => {
 
 // Quick Stats Card
 const QuickStats = () => {
-  const { data: profileData } = useQuery({
+  const { data: profileData } = useQuery<{
+    techScore?: number;
+    speedScore?: number;
+    enduranceScore?: number;
+    decisionMakingScore?: number;
+  }>({
     queryKey: ['/api/player/profile-overview'],
   });
 
