@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { TrainingMethodology } from "@/components/training/TrainingMethodology";
+import { AttributeMeasurement } from "@/components/assessment/AttributeMeasurement";
 import { 
   Search, 
   Filter, 
@@ -434,6 +436,46 @@ const DrawingTool = ({
 };
 
 export default function Team() {
+  // Filter and sort states for squad management
+  const [searchQuery, setSearchQuery] = useState("");
+  const [positionFilter, setPositionFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("rating");
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(1);
+  
+  // Tactical play states
+  const [tacticalPlays, setTacticalPlays] = useState<any[]>([]);
+  const [selectedTacticalPlay, setSelectedTacticalPlay] = useState<number | null>(null);
+  const [playAnimation, setPlayAnimation] = useState(false);
+  const [animationStep, setAnimationStep] = useState(0);
+  const [tacticsSaved, setTacticsSaved] = useState(false);
+  
+  // Game-specific strategy states
+  const [gameStrategy, setGameStrategy] = useState("balanced");
+  const [defensiveStyle, setDefensiveStyle] = useState("man");
+  const [offensiveStyle, setOffensiveStyle] = useState("motion");
+  const [pacePreference, setPacePreference] = useState("moderate");
+  const [focusedOpponent, setFocusedOpponent] = useState<string | null>(null);
+
+  // Lineup optimization states
+  const [optimizedLineup, setOptimizedLineup] = useState<any | null>(null);
+  const [optimizationCriteria, setOptimizationCriteria] = useState("balanced");
+  
+  // Training methodology states
+  const [trainingMethodology, setTrainingMethodology] = useState("combined");
+  const [selectedAgeGroup, setSelectedAgeGroup] = useState("college");
+  const [showAssessmentProtocol, setShowAssessmentProtocol] = useState(false);
+  const [attributeBeingAssessed, setAttributeBeingAssessed] = useState("");
+  
+  // Training session planner
+  const [plannedSessions, setPlannedSessions] = useState<any[]>([]);
+  const [showPeriodizationPlanner, setShowPeriodizationPlanner] = useState(false);
+  
+  // Attribute assessment states
+  const [showAttributeAssessment, setShowAttributeAssessment] = useState(false);
+  const [currentAssessmentType, setCurrentAssessmentType] = useState("physical");
+  const [isRecordingMeasurement, setIsRecordingMeasurement] = useState(false);
+  const [temporaryMeasurements, setTemporaryMeasurements] = useState<{[key: string]: number}>({});
+  
   // Players data
   const players = [
     { 
@@ -954,6 +996,44 @@ export default function Team() {
       }
     };
   }, []);
+  
+  // Handlers for attribute measurement
+  const handleRecordMeasurement = (attribute: string, value: number) => {
+    console.log(`Recording ${attribute}: ${value}`);
+    // In a real app, we would save this to the database
+  };
+  
+  const handleTemporaryMeasurementChange = (attribute: string, value: number) => {
+    setTemporaryMeasurements(prev => ({
+      ...prev,
+      [attribute]: value
+    }));
+  };
+  
+  const handleSaveMeasurements = () => {
+    console.log('Saving all measurements:', temporaryMeasurements);
+    // In a real app, we would save all measurements to the database
+    setIsRecordingMeasurement(false);
+    setTemporaryMeasurements({});
+  };
+  
+  // Handlers for training methodology
+  const handleGenerateTrainingPlan = () => {
+    const newSession = {
+      id: Date.now(),
+      ageGroup: selectedAgeGroup,
+      methodology: trainingMethodology,
+      date: new Date().toISOString().split('T')[0],
+      duration: "90 minutes",
+      focus: trainingMethodology === "reaction" ? "Reaction Ability Training" : 
+             trainingMethodology === "speed" ? "Speed Quality Training" :
+             trainingMethodology === "strength" ? "Strength Quality Training" :
+             trainingMethodology === "plyometric" ? "Plyometric Training" : "Combined Approach"
+    };
+    
+    setPlannedSessions([...plannedSessions, newSession]);
+    setShowPeriodizationPlanner(true);
+  };
 
   // Handle player drop on court
   const handlePlayerDrop = (item: any, newPosition: { x: string; y: string }) => {
@@ -1732,6 +1812,18 @@ export default function Team() {
             Training
           </TabsTrigger>
           <TabsTrigger 
+            value="assessment" 
+            className="text-xs py-2 px-4 data-[state=active]:bg-neutral-700 data-[state=active]:text-white rounded-none border-none"
+          >
+            Assessment
+          </TabsTrigger>
+          <TabsTrigger 
+            value="methodology" 
+            className="text-xs py-2 px-4 data-[state=active]:bg-neutral-700 data-[state=active]:text-white rounded-none border-none"
+          >
+            Methodology
+          </TabsTrigger>
+          <TabsTrigger 
             value="schedule" 
             className="text-xs py-2 px-4 data-[state=active]:bg-neutral-700 data-[state=active]:text-white rounded-none border-none"
           >
@@ -1995,6 +2087,104 @@ export default function Team() {
               <div className="p-4 text-center">
                 <p className="text-xs text-neutral-400">Team training schedule will be available soon.</p>
               </div>
+            </div>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="assessment" className="m-0">
+          <div className="fm-card">
+            <div className="fm-card-header">
+              <div className="flex items-center">
+                <BarChart2 className="h-3.5 w-3.5 text-neutral-400 mr-2" />
+                <h2 className="fm-card-title">Player Assessment</h2>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm" className="h-7 text-xs bg-neutral-800 border-neutral-700 text-neutral-200 hover:bg-neutral-700">
+                  Export Data
+                </Button>
+              </div>
+            </div>
+            <div className="fm-card-body">
+              <AttributeMeasurement
+                onRecordMeasurement={handleRecordMeasurement}
+                currentAssessmentType={currentAssessmentType}
+                onAssessmentTypeChange={setCurrentAssessmentType}
+                isRecordingMeasurement={isRecordingMeasurement}
+                onToggleRecording={() => setIsRecordingMeasurement(!isRecordingMeasurement)}
+                temporaryMeasurements={temporaryMeasurements}
+                onTemporaryMeasurementChange={handleTemporaryMeasurementChange}
+                onSaveMeasurements={handleSaveMeasurements}
+              />
+            </div>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="methodology" className="m-0">
+          <div className="fm-card">
+            <div className="fm-card-header">
+              <div className="flex items-center">
+                <FileText className="h-3.5 w-3.5 text-neutral-400 mr-2" />
+                <h2 className="fm-card-title">Training Methodology</h2>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm" className="h-7 text-xs bg-neutral-800 border-neutral-700 text-neutral-200 hover:bg-neutral-700">
+                  <Save className="h-3.5 w-3.5 mr-1" />
+                  Save Approach
+                </Button>
+              </div>
+            </div>
+            <div className="fm-card-body">
+              <TrainingMethodology
+                selectedAgeGroup={selectedAgeGroup}
+                onAgeGroupChange={setSelectedAgeGroup}
+                selectedMethodology={trainingMethodology}
+                onMethodologyChange={setTrainingMethodology}
+                onGenerateTrainingPlan={handleGenerateTrainingPlan}
+              />
+              
+              {showPeriodizationPlanner && plannedSessions.length > 0 && (
+                <div className="mt-6 border-t border-neutral-800 pt-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-semibold">Planned Training Sessions</h3>
+                    <Button variant="outline" size="sm" className="h-7 text-xs">
+                      <Plus className="h-3.5 w-3.5 mr-1" />
+                      Add Session
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+                    {plannedSessions.map((session) => (
+                      <div 
+                        key={session.id} 
+                        className="bg-neutral-800 border border-neutral-700 rounded-sm p-3 flex justify-between items-center"
+                      >
+                        <div>
+                          <div className="text-sm font-medium mb-1">{session.focus}</div>
+                          <div className="text-xs text-neutral-400">
+                            <span className="inline-block mr-3">
+                              <Calendar className="h-3 w-3 inline mr-1" />
+                              {session.date}
+                            </span>
+                            <span className="inline-block mr-3">
+                              <Clock className="h-3 w-3 inline mr-1" />
+                              {session.duration}
+                            </span>
+                            <span className="inline-block">
+                              <Users className="h-3 w-3 inline mr-1" />
+                              {session.ageGroup === "youth" ? "Youth (12-14)" : 
+                               session.ageGroup === "highSchool" ? "High School (15-18)" :
+                               session.ageGroup === "college" ? "College (19-22)" : "Professional (23+)"}
+                            </span>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm" className="h-7 text-xs text-neutral-400 hover:text-neutral-200">
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </TabsContent>
