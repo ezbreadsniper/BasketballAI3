@@ -28,7 +28,7 @@ const GlassPanel = ({
   hoverEffect?: boolean
 }) => (
   <motion.div 
-    className={`bg-neutral-800/60 backdrop-blur-md border border-neutral-700/50 rounded-lg overflow-hidden shadow-lg ${className}`}
+    className={`modern-card ${className}`}
     whileHover={hoverEffect ? { y: -5, transition: { duration: 0.2 } } : {}}
   >
     {children}
@@ -50,7 +50,7 @@ const DevelopmentProgress = () => {
 
   return (
     <GlassPanel className="p-4">
-      <h2 className="text-lg font-semibold text-white mb-3 flex items-center">
+      <h2 className="text-xl text-display font-semibold gradient-blue text-gradient mb-3 flex items-center">
         <span className="bg-blue-500/20 text-blue-400 p-1.5 rounded-md mr-2">
           <TrendingUp size={18} />
         </span>
@@ -133,7 +133,7 @@ const AIRecommendations = () => {
 
   return (
     <GlassPanel className="p-4">
-      <h2 className="text-lg font-semibold text-white mb-3 flex items-center">
+      <h2 className="text-xl text-display font-semibold gradient-purple text-gradient mb-3 flex items-center">
         <span className="bg-purple-500/20 text-purple-400 p-1.5 rounded-md mr-2">
           <Zap size={18} />
         </span>
@@ -172,7 +172,7 @@ const AIRecommendations = () => {
             </div>
           </motion.div>
         ))}
-        <button className="w-full mt-3 flex items-center justify-center py-2 text-sm text-neutral-400 hover:text-white transition-colors">
+        <button className="w-full mt-3 btn-secondary text-sm flex items-center justify-center">
           View all recommendations
           <ChevronRight size={14} className="ml-1" />
         </button>
@@ -213,7 +213,7 @@ const RecentActivities = () => {
 
   return (
     <GlassPanel className="p-4">
-      <h2 className="text-lg font-semibold text-white mb-3 flex items-center">
+      <h2 className="text-xl text-display font-semibold gradient-green text-gradient mb-3 flex items-center">
         <span className="bg-green-500/20 text-green-400 p-1.5 rounded-md mr-2">
           <Calendar size={18} />
         </span>
@@ -244,7 +244,7 @@ const RecentActivities = () => {
             </div>
           </motion.div>
         ))}
-        <button className="w-full mt-3 flex items-center justify-center py-2 text-sm text-neutral-400 hover:text-white transition-colors">
+        <button className="w-full mt-3 btn-secondary text-sm flex items-center justify-center">
           View activity history
           <ChevronRight size={14} className="ml-1" />
         </button>
@@ -269,7 +269,7 @@ const TrainingResources = () => {
 
   return (
     <GlassPanel className="p-4">
-      <h2 className="text-lg font-semibold text-white mb-3 flex items-center">
+      <h2 className="text-xl text-display font-semibold gradient-orange text-gradient mb-3 flex items-center">
         <span className="bg-orange-500/20 text-orange-400 p-1.5 rounded-md mr-2">
           <BookOpen size={18} />
         </span>
@@ -315,7 +315,7 @@ const TrainingResources = () => {
           </motion.div>
         ))}
       </div>
-      <button className="w-full mt-3 flex items-center justify-center py-2 text-sm text-neutral-400 hover:text-white transition-colors">
+      <button className="w-full mt-3 btn-secondary text-sm flex items-center justify-center">
         View all resources
         <ChevronRight size={14} className="ml-1" />
       </button>
@@ -338,7 +338,7 @@ const QuickStats = () => {
 
   return (
     <GlassPanel className="p-4 h-full flex flex-col">
-      <h2 className="text-lg font-semibold text-white mb-3 flex items-center">
+      <h2 className="text-xl text-display font-semibold gradient-heading mb-3 flex items-center">
         <span className="bg-red-500/20 text-red-400 p-1.5 rounded-md mr-2">
           <BarChart2 size={18} />
         </span>
@@ -369,7 +369,7 @@ const QuickStats = () => {
         </div>
         
         <motion.button 
-          className="mt-4 w-full bg-gradient-to-r from-primary/90 to-primary/70 text-white py-2 rounded-md backdrop-blur-sm font-medium flex items-center justify-center"
+          className="mt-4 w-full btn-primary"
           whileHover={{ y: -2 }}
           whileTap={{ y: 0 }}
         >
@@ -391,10 +391,10 @@ export default function DashboardEnhanced() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold text-display gradient-heading mb-1">
           Welcome back, Marcus Johnson
         </h1>
-        <p className="text-neutral-400">Your basketball development dashboard • April 9, 2025</p>
+        <p className="text-fade tracking-wide text-sm">Your basketball development dashboard • April 9, 2025</p>
       </motion.div>
       
       {/* Main dashboard grid */}
