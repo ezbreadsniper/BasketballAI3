@@ -7,7 +7,8 @@ import {
   Filter, 
   Download, 
   Settings, 
-  ChevronRight, 
+  ChevronRight,
+  ChevronDown, 
   Calendar, 
   Users, 
   Star, 
@@ -22,7 +23,19 @@ import {
   Square,
   ArrowUpRight,
   X,
-  HelpCircle
+  HelpCircle,
+  Clipboard,
+  Briefcase,
+  Shield,
+  ChevronUp,
+  Gauge,
+  BarChart2,
+  ArrowUpDown,
+  FileText,
+  Medal,
+  Activity,
+  Clock,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -40,6 +53,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
 
 // Types
 type Player = {
@@ -1105,15 +1120,32 @@ export default function Team() {
   
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="py-4 px-3 sm:px-4 lg:px-6 bg-neutral-900 text-neutral-100">
+      <div className="py-3 px-2 sm:px-3 lg:px-4 bg-neutral-900 text-neutral-100">
         {/* Football Manager style header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 pb-4 border-b border-neutral-800">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 pb-3 border-b border-neutral-800">
           <div>
-            <div className="flex items-center mb-1">
-              <Calendar className="h-4 w-4 mr-2 text-neutral-400" />
-              <span className="text-sm text-neutral-400">April 9, 2025</span>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-sm flex items-center justify-center">
+                <Users className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center mb-0.5">
+                  <Calendar className="h-3.5 w-3.5 mr-1.5 text-neutral-400" />
+                  <span className="text-xs text-neutral-400">April 9, 2025</span>
+                </div>
+                <h1 className="text-base font-bold text-neutral-100">Squad Management</h1>
+              </div>
             </div>
-            <h1 className="text-lg font-bold text-neutral-100">Team Management</h1>
+          </div>
+          <div className="flex items-center gap-2 mt-3 md:mt-0">
+            <Button size="sm" variant="outline" className="h-8 text-xs bg-neutral-800 border-neutral-700 text-neutral-200 hover:bg-neutral-700">
+              <Save className="h-3.5 w-3.5 mr-1.5" />
+              Save Lineup
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 text-xs bg-neutral-800 border-neutral-700 text-neutral-200 hover:bg-neutral-700">
+              <FileText className="h-3.5 w-3.5 mr-1.5" />
+              Export Team Sheet
+            </Button>
           </div>
         </div>
 
