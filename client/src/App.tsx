@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import AppLayout from "./components/layout/AppLayout";
 import Dashboard from "@/pages/dashboard";
-import DashboardEnhanced from "@/pages/dashboard-enhanced";
 import Profile from "@/pages/profile";
 import TrainingPlans from "@/pages/training-plans";
 import Team from "@/pages/team";
@@ -18,8 +17,7 @@ function Router() {
   return (
     <AppLayout>
       <Switch>
-        <Route path="/" component={DashboardEnhanced} />
-        <Route path="/dashboard-old" component={Dashboard} />
+        <Route path="/" component={Dashboard} />
         <Route path="/profile" component={Profile} />
         <Route path="/training-plans" component={TrainingPlans} />
         <Route path="/team" component={TeamEnhanced} />
