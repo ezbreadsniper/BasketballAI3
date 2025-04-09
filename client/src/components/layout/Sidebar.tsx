@@ -12,7 +12,9 @@ import {
   Target,
   Settings,
   ChevronRight,
-  Ruler
+  Ruler,
+  Activity,
+  Heart
 } from "lucide-react";
 
 interface SidebarProps {
@@ -39,6 +41,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         { path: "/training-plans", label: "Training Schedule", icon: <Dumbbell className="h-4 w-4 mr-2" /> },
         { path: "/analytics", label: "Performance Data", icon: <BarChart3 className="h-4 w-4 mr-2" /> },
         { path: "/progress", label: "Development Hub", icon: <TrendingUp className="h-4 w-4 mr-2" /> },
+        { path: "/injury-management", label: "Injury Management", icon: <Activity className="h-4 w-4 mr-2" /> },
       ]
     },
     {

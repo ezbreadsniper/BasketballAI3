@@ -12,6 +12,7 @@ import Resources from "@/pages/resources";
 import Analytics from "@/pages/analytics";
 import Progress from "@/pages/progress";
 import PlayerAssessment from "@/pages/player-assessment";
+import InjuryManagement from "@/pages/injury-management";
 import AuthPage from "./pages/auth-page";
 import { AuthProvider } from "./hooks/use-auth";
 import { ProtectedRoute } from "./lib/protected-route";
@@ -66,6 +67,12 @@ function Router() {
       <ProtectedRoute path="/progress" component={() => (
         <AppLayout>
           <Progress />
+        </AppLayout>
+      )} />
+      
+      <ProtectedRoute path="/injury-management" component={() => (
+        <AppLayout>
+          <InjuryManagement />
         </AppLayout>
       )} />
       
