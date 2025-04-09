@@ -11,51 +11,133 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
   
-  /* Football Manager 2024 inspired styles */
+  /* Modern Football Manager 2024 inspired styles with sleek effects */
   :root {
     --neutral-750: #1f1f23;
+    --neutral-850: #18181c;
+    --blur-background: rgba(18, 18, 22, 0.75);
+    --glow-primary: 0 0 15px rgba(37, 99, 235, 0.5);
+    --glass-background: rgba(30, 30, 35, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
   }
   
   .bg-neutral-750 {
     background-color: var(--neutral-750);
   }
   
-  /* Scrollbar styling similar to Football Manager */
+  .bg-neutral-850 {
+    background-color: var(--neutral-850);
+  }
+  
+  /* Sleek scrollbar styling */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
   
   ::-webkit-scrollbar-track {
-    @apply bg-neutral-900;
+    @apply bg-neutral-900 rounded-full;
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-700 rounded-sm;
+    @apply bg-neutral-700 rounded-full;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-600;
+    @apply bg-primary rounded-full;
+    transition: all 0.3s ease;
   }
   
-  /* Add Football Manager style focus outline */
+  /* Modern focus styles */
   *:focus-visible {
-    @apply outline-none ring-1 ring-primary;
+    @apply outline-none ring-2 ring-primary ring-opacity-60;
   }
   
-  /* Make sure buttons have nice hover effects */
-  button, a {
-    @apply transition-colors duration-200;
+  /* Enhanced transitions for interactions */
+  button, a, .interactive-element {
+    @apply transition-all duration-200;
+  }
+  
+  /* Modern glass morphism effect */
+  .glass-panel {
+    background: var(--glass-background);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+  }
+  
+  /* Hover glow effects */
+  .hover-glow:hover {
+    box-shadow: var(--glow-primary);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+  
+  .pulse-highlight {
+    animation: pulse-animation 2s infinite;
+  }
+  
+  @keyframes pulse-animation {
+    0% {
+      box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    }
+  }
+  
+  /* Sleek animations */
+  .fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  /* Smoother transitions for interactive elements */
+  .smooth-transform {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  /* Player card hover effects */
+  .player-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
   }
 }
 
-/* Football Manager card styling */
+/* Enhanced Football Manager card styling */
 .fm-card {
   @apply bg-neutral-800 border border-neutral-700 rounded-sm;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fm-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .fm-card-header {
   @apply flex items-center justify-between border-b border-neutral-700 px-3 py-2;
+  backdrop-filter: blur(5px);
 }
 
 .fm-card-title {
@@ -66,19 +148,94 @@
   @apply p-3;
 }
 
-/* Stat rating colors */
+/* Glossy stat rating colors with subtle glow */
 .rating-excellent {
-  @apply bg-green-600 text-white;
+  @apply bg-gradient-to-br from-green-500 to-green-700 text-white;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
 }
 
 .rating-good {
-  @apply bg-blue-600 text-white;
+  @apply bg-gradient-to-br from-blue-500 to-blue-700 text-white;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
 .rating-average {
-  @apply bg-yellow-600 text-white;
+  @apply bg-gradient-to-br from-yellow-500 to-yellow-700 text-white;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
 .rating-poor {
-  @apply bg-red-600 text-white;
+  @apply bg-gradient-to-br from-red-500 to-red-700 text-white;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+/* Interactive elements for drag and drop */
+.draggable {
+  cursor: grab;
+  user-select: none;
+}
+
+.draggable:active {
+  cursor: grabbing;
+}
+
+.droppable {
+  transition: all 0.2s ease;
+}
+
+.droppable.active {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 2px dashed rgba(59, 130, 246, 0.5);
+}
+
+/* Basketball court styles */
+.basketball-court {
+  background: linear-gradient(to bottom, #2D5E38, #1A4225);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.court-marking {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Play animation styles */
+.play-arrow {
+  stroke-dasharray: 25;
+  stroke-dashoffset: 25;
+  animation: dash 1s linear forwards;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Slick button styles */
+.slick-btn {
+  @apply bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-medium rounded-sm px-3 py-1.5 text-xs;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.slick-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Modern tooltip style */
+.tooltip {
+  @apply absolute invisible bg-neutral-800 text-neutral-100 text-xs rounded px-2 py-1;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  transform: translateY(10px);
+}
+
+.tooltip-trigger:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
 }
